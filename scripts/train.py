@@ -14,7 +14,7 @@ import logging
 from utils import (get_data, get_y, get_x, save, get_n_epochs)
 from ntrials import ntrials
 
-from models import deepar, lgbm, nbeats, tft
+from models import deepar, lgbm, nbeats, tft, timesfm
 from models import sn, arimax, hwmm, hwdm, hwam
 
 ## Likely to be moved to separate module
@@ -27,8 +27,8 @@ if __name__=='__main__':
                         choices=['occ'], help='Target to be tested. Currently only occ is supported.', 
                         metavar='target')
     parser.add_argument('model', 
-                        choices=['deepar', 'lgbm', 'nbeats', 'tft', 'sn', 'arimax', 'hwmm', 'hwdm', 'hwam'], 
-                        help='Model to be tested. Choose from: deepar, lgbm, nbeats, tft, sn, arimax, hwmm, hwdm, hwam.',
+                        choices=['deepar', 'lgbm', 'nbeats', 'tft', 'timesfm', 'sn', 'arimax', 'hwmm', 'hwdm', 'hwam'], 
+                        help='Model to be tested. Choose from: deepar, lgbm, nbeats, tft, timesfm, sn, arimax, hwmm, hwdm, hwam.',
                         metavar='model')
     parser.add_argument('featureset', 
                         choices=['a', 'u'], help='Featureset to use as an input. Select \'a\' or \'u\'.',
@@ -118,7 +118,7 @@ if __name__=='__main__':
     pc, fc = get_x(data, FEATURESET)
 
     # Scaling and splitting y
-    if MODEL!='lgbm':
+    if MODEL!='lgbm' and MODEL!='timesfm':
         scaler = MinMaxScaler(feature_range=(0, 1))
         y_transformer = Scaler(scaler)
         y = y_transformer.fit_transform(y)
@@ -176,22 +176,56 @@ if __name__=='__main__':
 
     logging.info('Starting backtesting on the test set')
 
-    y_pred = model.historical_forecasts(
-        series=y,
-        future_covariates=fc if model.supports_future_covariates else None,
-        past_covariates=pc if model.supports_past_covariates else None,
-        num_samples=1 if MODEL in ['sn'] else 100,
-        start=SECONDSPLIT,
-        forecast_horizon=24,
-        retrain=retrain,
-        train_length=train_length,
-        last_points_only=False,
-        verbose=True,
-        stride=24,
-        overlap_end=True
-        )
+    if MODEL != 'timesfm':
+        y_pred = model.historical_forecasts(
+            series=y,
+            future_covariates=fc if model.supports_future_covariates else None,
+            past_covariates=pc if model.supports_past_covariates else None,
+            num_samples=1 if MODEL in ['sn'] else 100,
+            start=SECONDSPLIT,
+            forecast_horizon=24,
+            retrain=retrain,
+            train_length=train_length,
+            last_points_only=False,
+            verbose=True,
+            stride=24,
+            overlap_end=True
+            )
+    else:
+        # TODO: Does not work on other quantiles than 0.5
+        # default quantiles from timesfm are 0.1, 0.2 ... 0.9
+        # not possible at this time to get custom quantiles like 0.05, 0.95
+        quantiles = [0.5]
+        y_pred = []
+        current_date = pd.to_datetime(SECONDSPLIT)
+        end_date = data['ds'].max() - pd.Timedelta(hours=24)
+        #end_date = current_date + pd.Timedelta(hours=172) # use for trial run
+        while current_date < end_date:
 
-    if MODEL!='lgbm':
+            input_data = data[data['ds'] < current_date]
+
+            forecast_df = model.forecast_on_df(
+                inputs=input_data,
+                freq="h", 
+                value_name='Target:Occupancy',
+                num_jobs=-1,
+            )
+            
+            forecast_df['datetime'] = pd.date_range(start=current_date, periods=24, freq='H')
+            value_cols = [f'timesfm-q-{q}' for q in quantiles]
+
+            # for quantiles to work correctly, the TimeSeries would need to be constructed so that it is probabilistic
+            # just having 3 columns (which turn into components in TimeSeries) for quantiles is not enough. The quantiles
+            # would need to be made into TimeSeries 'samples' and I'm not sure how to do that
+            forecast_series = TimeSeries.from_dataframe(forecast_df, time_col='datetime', value_cols=value_cols, freq='H')
+            y_pred.append(forecast_series)
+
+            # Move to next 24-hour period
+            current_date += pd.Timedelta(hours=24)
+
+        
+
+    if MODEL!='lgbm' and MODEL!='timesfm':
         y_pred = [y_transformer.inverse_transform(x) for x in y_pred]
 
     save(model_name=MODEL,

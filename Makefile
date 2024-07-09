@@ -41,6 +41,9 @@ NBEATS = $(preddir)/50/occ-nbeats-u-0.csv\
 ETS = $(preddir)/50/occ-hwam-u-1.csv\
 	$(preddir)/50/occ-hwdm-u-1.csv
 
+TIMESFM = $(preddir)/50/occ-timesfm-u-0.csv\
+		$(preddir)/50/occ-timesfm-u-1.csv
+
 SCRIPTS = scripts/train.py\
 	scripts/models/arimax.py\
 	scripts/models/deepar.py\
@@ -49,7 +52,8 @@ SCRIPTS = scripts/train.py\
 	scripts/models/lgbm.py\
 	scripts/models/nbeats.py\
 	scripts/models/tft.py\
-	scripts/models/utils.py
+	scripts/models/utils.py\
+	scripts/models/timesfm.py
 
 PLOT1 = output/plots/beds.jpg\
 
@@ -86,7 +90,7 @@ TEXFILES = report/manuscript.tex\
 	report/sections/declarations.tex\
 	report/sections/conclusions.tex\
 
-PREDDATA = $(SN) $(DEEPAR) $(NBEATS) $(LGBM) $(TFT) $(ARIMAX) $(ETS)
+PREDDATA = $(SN) $(DEEPAR) $(NBEATS) $(LGBM) $(TFT) $(ARIMAX) $(ETS) $(TIMESFM)
 
 TRUEDATA = data/processed/true_matrices/occ.csv
 
@@ -123,6 +127,8 @@ figures: $(FIGURES)
 tft: $(TFT)
 
 lgbm: $(LGBM)
+
+timesfm: $(TIMESFM)
 
 output/declarations.pdf: report/declarations.tex report/sections/declarations.tex
 	cd report/\

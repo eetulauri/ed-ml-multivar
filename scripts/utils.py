@@ -22,8 +22,8 @@ def get_n_epochs(model):
     return int(n_epochs.group(1)) + 1
 
 
-def preprocess(data, model):
-    if model!='lgbm':
+def preprocess(data, model, target_name):
+    if model!='lgbm' and model!='timesfm':
         # Process holidays
         holiday_names = pd.get_dummies(data['Calendar:Holiday_name'], prefix='Holiday_name', prefix_sep=':')
         holiday_names = holiday_names.iloc[:,1:]
@@ -46,6 +46,11 @@ def preprocess(data, model):
         le = LabelEncoder()
         # Process holidays
         data['Calendar:Holiday_name'] = le.fit_transform(data['Calendar:Holiday_name'])
+    elif model=='timesfm':
+        # timesfm only allows time column 'ds' and unique_id column to separate multiple time series and the target column
+        data['ds'] = pd.to_datetime(data.index)
+        data['unique_id'] = 'T1'
+        data = data[['ds', 'unique_id', 'Target:Occupancy']]
     else:
         raise ValueError('Model not supported')
         
@@ -65,7 +70,7 @@ def get_data(target_name, model):
     data = data["2017":]
     
     data = data.asfreq('h')
-    data = preprocess(data, model)
+    data = preprocess(data, model, target_name)
 
     return data
 
@@ -172,11 +177,12 @@ def save(
         outpath.mkdir(parents=True, exist_ok=True)
         matrix.to_csv(outpath / f"{unique_name}.csv")
 
-    # models
-    outpath = here('data/processed/models')
-    outpath.mkdir(parents=True, exist_ok=True)
-    model_path = str(outpath / f'{unique_name}.pkl')
-    model.save(model_path)
+    # save model if possible
+    if model_name!='timesfm':
+        outpath = here('data/processed/models')
+        outpath.mkdir(parents=True, exist_ok=True)
+        model_path = str(outpath / f'{unique_name}.pkl')
+        model.save(model_path)
 
     if study:
         # studies
