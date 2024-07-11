@@ -15,6 +15,7 @@ colordict = {
     'tft' : "tab:green",
     'deepar' : "tab:blue",
     'nbeats' : "tab:orange",
+    'timesfm' : "tab:purple",
     'sn' : ".9",
     'hwdm' : ".8",
     'hwam' : ".7",
@@ -29,7 +30,8 @@ name_mask = {
     'tft' : 'TFT',
     'hwdm' : 'HWDM',
     'hwam' : 'HWAM',
-    'sn' : 'SN'
+    'sn' : 'SN',
+    'timesfm': 'TimesFM'
 }
 
 def interval_score(
