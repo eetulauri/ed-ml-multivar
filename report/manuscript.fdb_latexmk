@@ -1,13 +1,13 @@
 # Fdb version 4
-["bibtex manuscript"] 0 "manuscript.aux" "manuscript.bbl" "manuscript" 1721636044.41472 -1
+["bibtex manuscript"] 0 "manuscript.aux" "manuscript.bbl" "manuscript" 1721646089.34781 -1
   "./references.bib" 1712317023 114674 9c8908904a61bdab76ac01652b62dc5f ""
   "C:/Users/eetu/AppData/Local/Programs/MiKTeX/bibtex/bst/natbib/plainnat.bst" 1284455456 26816 ffe5423d2019860bad9f54bc402fac15 ""
-  "manuscript.aux" 1721636043 19104 54c075217b91fb3a8b3f034c9046b4bc "pdflatex"
+  "manuscript.aux" 1721646088 19104 54c075217b91fb3a8b3f034c9046b4bc "pdflatex"
   (generated)
   "manuscript.bbl"
   "manuscript.blg"
   (rewritten before read)
-["pdflatex"] 1721636042.41969 "f:/ed-ml-multivar/report/manuscript.tex" "manuscript.pdf" "manuscript" 1721636044.41528 0
+["pdflatex"] 1721646086.4308 "f:/ed-ml-multivar/report/manuscript.tex" "manuscript.pdf" "manuscript" 1721646089.34834 0
   "../output/plots/beds.jpg" 1720618162 671607 f8ca1cfd475a310267c8eb63cb40cb14 ""
   "../output/plots/horizon_mae-a-1.jpg" 1720681385 114170 2e20c1c6a968243f508ffb4748f126ea ""
   "../output/plots/horizon_mae-u-1.jpg" 1720681410 152078 72ef93bbe65e4edf09fadcc34d3ef254 ""
@@ -16,7 +16,7 @@
   "../output/plots/performance_monthly-u-1.jpg" 1720687200 238730 94026da7e7973dc160f378ea297393eb ""
   "../output/tables/distance_hospitals.tex" 1720603914 859 98a62fade54fe6a2d09acac6f6d672c0 ""
   "../output/tables/distance_traffic.tex" 1720603914 1620 06c920baa33336249939db576ca0deff ""
-  "../output/tables/performance.tex" 1721635919 1255 34cd4a73919c2913febeec08598c6d4d ""
+  "../output/tables/performance.tex" 1721646084 1255 046a647ec05add431cf365d9176317fd ""
   "../output/tables/runtime.tex" 1720617549 873 7019ebfb1c15b60a3e28f5b368c2dda1 ""
   "../output/tables/seasonality.tex" 1721636041 641 10d933f815a51201a1123fa36ebb6f42 ""
   "C:/Users/eetu/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map" 1720695736 329315 6902408025985809752b28b91d02e8a0 ""
@@ -181,9 +181,9 @@
   "C:/Users/eetu/AppData/Local/Programs/MiKTeX/tex/latex/url/url.sty" 1388490452 12796 8edb7d69a20b857904dd0ea757c14ec9 ""
   "C:/Users/eetu/AppData/Local/Programs/MiKTeX/tex/latex/xcolor/xcolor.sty" 1656236890 56148 51a9a8571c07b9921892ae11063ae853 ""
   "f:/ed-ml-multivar/report/manuscript.tex" 1712317023 3646 307c491dff8eb3f0c72a5539ac32397f ""
-  "manuscript.aux" 1721636043 19104 54c075217b91fb3a8b3f034c9046b4bc "pdflatex"
+  "manuscript.aux" 1721646088 19104 54c075217b91fb3a8b3f034c9046b4bc "pdflatex"
   "manuscript.bbl" 1720698439 0 d41d8cd98f00b204e9800998ecf8427e "bibtex manuscript"
-  "manuscript.out" 1721636043 11264 f57c374bed0897de3c8ef1512de53657 "pdflatex"
+  "manuscript.out" 1721646088 11264 f57c374bed0897de3c8ef1512de53657 "pdflatex"
   "manuscript.tex" 1712317023 3646 307c491dff8eb3f0c72a5539ac32397f ""
   "sections/abstract.tex" 1712317023 1332 80bcb698544cce04b0c359ecf93b2052 ""
   "sections/appendix_a.tex" 1712317023 3184 e1aebf65374b748069fa1603e7469e1f ""
